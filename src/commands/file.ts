@@ -1,3 +1,4 @@
+import { describe } from "node:test";
 import schema from "../utils/Schemas/files.js";
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, AnyComponentBuilder } from "discord.js";
 function findThumbnail(file){
@@ -12,6 +13,25 @@ function findThumbnail(file){
 
 export default {
     name: "file",
+    description: "A small file sharing system!",
+    subcommands: [{
+        name: "create", 
+        description: "Creates a file",
+        aliases: [],
+        permissions: [],
+        usage: "file create <filename> <visibility>"
+    },{
+        name: "delete",
+        description: "Deletes a file",
+        aliases: [],
+        permissions: ["FileAdmin", "FileOwner"],
+        usage: "file delete <filename>"
+    },{
+        name: "view",
+        description: "Views a file",
+        aliases: [],
+        permissions: ["PublicFile", "PrivateFileAccess", "FileOwner"]
+    }],
     aliases: [],
     owner: false,
     permissions: [],
@@ -20,11 +40,11 @@ export default {
         if(args[0]){
             switch(args[0]){
                 case "create": {
-                    if(!args[1]) return message.reply({ embeds: [ new EmbedBuilder()
+                    if(!args[2]) return message.reply({ embeds: [ new EmbedBuilder()
                     .setTitle("Error")
                 .setDescription("File name not provided.")
             .setColor("Red")
-        .setFooter({ text: "c!file create hi.txt" }) ] })
+        .setFooter({ text: "c!file create hi.txt <visibility>" }) ] })
                     const data = await schema.model.findOne({ Filename: args[1] })
                     if(data){
                         message.reply({ embeds: [ new EmbedBuilder()
@@ -33,7 +53,7 @@ export default {
                     .setColor("Red")
                 .setFooter({ text: "c!file create hi.txt" }) ] })
                     } else {
-                        await schema.create(schema.model, message.author.id, args[1]);
+                        await schema.create(schema.model, message.author.id, args[1], args[2]);
 
                         message.reply({ embeds: [ new EmbedBuilder()
                             .setTitle("Success!")
@@ -52,7 +72,7 @@ export default {
                     if(data){
                         if(data.FileData.isPrivate) return message.reply({ embeds: [ new EmbedBuilder()
                             .setTitle("Error")
-                        .setDescription("File is Private.")
+                        .setDescription("You Don't have the PrivateFileAccess permission!")
                     .setColor("Red")
                 .setFooter({ text: "c!file view hi.txt" }) ] })
                     const button = new ButtonBuilder()

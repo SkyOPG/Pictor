@@ -16,14 +16,14 @@ const SchemaModel = model('files', fileSchema);
 
 export default {
     model: SchemaModel,
-    create: async (model: any, owner: any, file: string): Promise<void> => {
+    create: async (model: any, owner: any, file: string, visibility: string): Promise<void> => {
         await model.create({
             Filename: file,
             Owner: owner,
             Views: 0,
             Forks: 0,
             FileData: {
-                isPrivate: false,
+                isPrivate: visibility === "visible" ? true : false,
                 Code: ""
             }
         })

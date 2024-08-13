@@ -1,8 +1,10 @@
+import { ErrorEmbed } from '../utils/errors.js';
 import economy from '../utils/Schemas/economy.js';
 import { EmbedBuilder } from 'discord.js';
 
 export default {
     name: 'stars',
+    description: "Shows your Star Economy stats",
     aliases: ['bal', 'balance'],
     owner: false,
     permissions: ["SendMessages"],
@@ -12,10 +14,7 @@ export default {
         let user;
          user = message.author
         const data: any = await economy.model.findOne({ User: user.id })
-        const error = new EmbedBuilder()
-        .setTitle('Error')
-        .setDescription("you are not registered yet, please use `c!register` first!")
-        .setColor('Red')
+        const error = ErrorEmbed(client, "ECO403", "Unauthorized, please create an account first!");
         if(!data) return message.channel.send({ embeds: [error] })
 
         const embed = new EmbedBuilder()

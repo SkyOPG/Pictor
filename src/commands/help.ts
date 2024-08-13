@@ -14,6 +14,7 @@ import {
 import file from './index.js';
 import { getPageValues, Pagination } from '../utils/pagination.js';
 import { SelectMenu } from '../utils/selectmenu.js';
+import axios from 'axios';
 
 function LoadCommands(file: any){
     const arr: APIEmbedField[] = [];
@@ -49,6 +50,10 @@ export default {
     enabled: true,
     owner: false,
     async execute(client: Client<true>, message: Message<true>, args: string[]){
+        const githubApiBaseUrl = 'https://api.github.com';
+        const repo = 'SkyOPG/Pictor';
+        const response = await axios.get(`${githubApiBaseUrl}/repos/${repo}`);
+        const { stargazers_count } = response.data;
         if(args[0]){
             const command = args[0];
             let thing = file.commands.get(command);
@@ -58,6 +63,8 @@ export default {
                     return message.reply("No command found with name: "+command);
                 thing = alias;
             }
+            if(thing.subcommands)
+                return;
 
             const embed = new EmbedBuilder()
                 .setAuthor({
@@ -86,8 +93,18 @@ export default {
         .setTitle("Help")
         .setColor("DarkAqua")
         .setThumbnail(client.user.displayAvatarURL())
-        .setDescription("Hello! I'm Pictor, a multipurpose discord bot with the goal of being a cool, clean and useful bot for every type of server in this platform, i'm currently at a public test phase!\n\n**Changelogs:**\n> **V0.4.0-TS**\n> - rewrittten from JS\n> - bugfixes");
-        
+        .setDescription("Hello! I'm Pictor, a multipurpose discord bot with the goal of being a cool, clean and useful bot for every type of server in this platform, i'm currently at a public test phase!"
+            +"\n\n**Changelogs:**\n> **V0.4.0-TS**\n> - rewrittten from JS\n> - bugfixes\n**Stats**\n"
+            +`> Commands: \`${file.commands.size}\`\n`
+            +`> Aliases: \`${file.aliases.size}\`\n`
+            +`> Users: \`${client.users.cache.size}\`\n`
+            +`> Servers: \`${client.guilds.cache.size}\`\n`
+            +`> NodeJS: \`${process.version}\`\n`
+            +`> Stars: \`${stargazers_count}\`\n`)
+        .setFooter({
+            text: "Made with 🤍 using Discord.JS",
+            iconURL: "https://cdn.discordapp.com/attachments/1128839554447716382/1129221123024900096/javascript-g698e8f30f_640.png"
+        });
 		const msg: Message<true> = await message.channel.send({
 			embeds: [ovr],
             components: [HelpMenu(0)]

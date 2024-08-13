@@ -9,10 +9,9 @@ export default event(Events.MessageCreate, async ({ log }, message: Message<bool
 
     const content = msg.content.slice(2).split(" ");
     const [command, ...args]: string[] = content;
-    const cmd: any = Commands.commands.get(command);
-    const alias: any = Commands.aliases.get(command);
+    const cmd: any = Commands.commands.get(command) || Commands.aliases.get(command);
 
-    if(!cmd && !alias){
+    if(!cmd){
         const massage = await msg.reply("that command dosen't exist");
         setTimeout(() => massage.delete(), 2500); 
         return;
@@ -39,10 +38,10 @@ export default event(Events.MessageCreate, async ({ log }, message: Message<bool
     setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
 
     try {
-        if(cmd){
+        if(!cmd) return;
             if(!cmd.enabled) return msg.channel.send("This command is disabled");
             if(cmd.owner){
-                return msg.author.id === "849283841583743036" ? cmd.execute(Client, msg, args) : msg.channel.send("This is an owner-only command...")
+                return msg.author.id === "1175939227440136218" ? cmd.execute(Client, msg, args) : msg.channel.send("This is an owner-only command...")
             } else if(cmd.permissions.length > 0){
                 const permissions = cmd.permissions
                 for(const perm of permissions){
@@ -50,9 +49,6 @@ export default event(Events.MessageCreate, async ({ log }, message: Message<bool
                 }
             }
             cmd.execute(Client, msg, args);
-        } else if(alias){
-            alias.execute(Client, msg, args);
-        }
     } catch (err) {
         log("[Error]", err);
     }
