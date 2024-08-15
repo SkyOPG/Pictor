@@ -1,7 +1,7 @@
 import { Collection } from 'discord.js';
 import ping from './ping.js';
 import cookie from './cookie.js';
-import bal from './bal.js';
+import bal from './economy/bal.js';
 import ball from './ball.js';
 import evalcmd from './eval.js';
 import filecmd from './file.js';

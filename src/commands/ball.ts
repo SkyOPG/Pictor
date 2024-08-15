@@ -11,7 +11,7 @@ export default {
     enabled: true,
     category: "fun",
     async execute(client: Client<true>, message: Message<true>, args: string[]) {
-        const error = ErrorEmbed(client, "PIC422", "Field 'question' cannot be empty.")
+        const error = ErrorEmbed("PIC422", "Field 'question' cannot be empty.")
         const randomPick = answers[Math.floor(Math.random() * answers.length)];
         if(!args[0])
             return message.channel.send({

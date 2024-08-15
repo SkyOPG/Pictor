@@ -3,6 +3,10 @@ import { Collection, Message } from 'discord.js';
 import Commands from '../commands/index.js';
 import Client from '../structs/client.js';
 
+function handleCommandCooldowns(cmd, ){
+
+}
+
 export default event(Events.MessageCreate, async ({ log }, message: Message<boolean>) => {
     const msg = message as Message<true>;
     if(!msg.content.startsWith("c!")) return;

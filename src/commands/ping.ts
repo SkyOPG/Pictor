@@ -13,7 +13,7 @@ export default {
     aliases: ["p"],
     description: "Replies with pong",
     owner: false,
-    enabled: true, // TODO: add enabled flag
+    enabled: true,
     permissions: [],
     category: "general",
     execute: async (client: Client<boolean>, message: Message<boolean>, _args: string[]) => {

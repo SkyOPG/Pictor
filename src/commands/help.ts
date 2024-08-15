@@ -90,11 +90,13 @@ export default {
         let currentlyAt = 0;
 
         const ovr = new EmbedBuilder()
-        .setTitle("Help")
+        .setAuthor({
+            name: "Help",
+            iconURL: client.user.displayAvatarURL()
+        })
         .setColor("DarkAqua")
-        .setThumbnail(client.user.displayAvatarURL())
         .setDescription("Hello! I'm Pictor, a multipurpose discord bot with the goal of being a cool, clean and useful bot for every type of server in this platform, i'm currently at a public test phase!"
-            +"\n\n**Changelogs:**\n> **V0.4.0-TS**\n> - rewrittten from JS\n> - bugfixes\n**Stats**\n"
+            +"\n\n**Stats**\n"
             +`> Commands: \`${file.commands.size}\`\n`
             +`> Aliases: \`${file.aliases.size}\`\n`
             +`> Users: \`${client.users.cache.size}\`\n`
@@ -123,9 +125,8 @@ export default {
                     break;
                     case "all":
                         currentlyAt = 1;
-                        await msg.edit({ embeds: [new EmbedBuilder().setTitle('All Commands')
+                        await msg.edit({ embeds: [new EmbedBuilder().setAuthor({ name: "All Commands", iconURL: client.user.displayAvatarURL() })
                             .addFields(getPageValues(arr, page, 6))
-                            .setThumbnail(client.user.displayAvatarURL())
                             .setColor("DarkAqua")], components: [HelpMenu(currentlyAt), Pagination(page, Math.ceil(arr.length / 6))]}).catch(() => {})
                         b.deferUpdate().catch(console.error);
                     break;
@@ -143,9 +144,8 @@ export default {
                         page++;
                         
                         await msg.edit({ embeds: [new EmbedBuilder()
-                            .setTitle('All Commands')
+                            .setAuthor({ name: "All Commands", iconURL: client.user.displayAvatarURL() })
                             .addFields(getPageValues(arr, page, 6))
-                            .setThumbnail(client.user.displayAvatarURL())
                             .setColor("DarkAqua")], components: [HelpMenu(currentlyAt), Pagination(page, Math.ceil(arr.length / 6))]}).catch(() => {})
                         b.deferUpdate().catch(() => {});
                     break;
@@ -160,9 +160,8 @@ export default {
                         page--;
 
                         await msg.edit({ embeds: [new EmbedBuilder()
-                            .setTitle('All Commands')
+                            .setAuthor({ name: "All Commands", iconURL: client.user.displayAvatarURL() })
                             .addFields(getPageValues(arr, page, 6))
-                            .setThumbnail(client.user.displayAvatarURL())
                             .setColor("DarkAqua")], components: [HelpMenu(currentlyAt), Pagination(page, Math.ceil(arr.length / 6))]}).catch(() => {})
                         b.deferUpdate().catch(() => {});
                     break;

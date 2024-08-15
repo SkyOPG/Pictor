@@ -1,6 +1,6 @@
-import { ErrorEmbed } from '../utils/errors.js';
-import economy from '../utils/Schemas/economy.js';
-import { EmbedBuilder } from 'discord.js';
+import economy from '../../utils/Schemas/economy.js';
+import { Client, EmbedBuilder, Message } from 'discord.js';
+import { handleEconomyErrors } from './util.js';
 
 export default {
     name: 'stars',
@@ -10,12 +10,11 @@ export default {
     permissions: ["SendMessages"],
     enabled: true,
     category: "economy",
-    async execute(client, message, args){
-        let user;
-         user = message.author
+    async execute(client: Client<true>, message: Message<true>, args: string[]){
+        let user = message.author || message.mentions.users.first();
         const data: any = await economy.model.findOne({ User: user.id })
-        const error = ErrorEmbed(client, "ECO403", "Unauthorized, please create an account first!");
-        if(!data) return message.channel.send({ embeds: [error] })
+        const error = handleEconomyErrors(data, "stars");
+        if(error) return message.channel.send({ embeds: [error] })
 
         const embed = new EmbedBuilder()
         .setTitle(`${user.username}'s Balance`)
@@ -28,3 +27,4 @@ export default {
         message.channel.send({ embeds: [embed] })
     }
 }
+
